@@ -1,7 +1,7 @@
 {
-  "name": "@infra-blocks/ts-lib-template",
+  "name": "@infra-blocks/checks",
   "version": "0.0.0",
-  "description": "This repository is a template to generate repositories meant to hold the source code of NPM packages written in TypeScript.",
+  "description": "A library with convenient checks for preconditions and more.",
   "exports": "./lib/index.js",
   "engines": {
     "node": ">=18.0.0"
@@ -30,6 +30,7 @@
     "@types/node": "^18.16.16",
     "@types/sinon": "^10.0.15",
     "@types/sinon-chai": "^3.2.9",
+    "@types/verror": "^1.10.6",
     "@typescript-eslint/eslint-plugin": "^5.59.8",
     "@typescript-eslint/parser": "^5.59.8",
     "chai": "^4.3.7",
@@ -45,6 +46,10 @@
     "ts-node": "^10.9.1",
     "typescript": "^5.0.4"
   },
-  "author": "",
-  "license": "ISC"
+  "author": "PhilLavoie",
+  "license": "ISC",
+  "dependencies": {
+    "@infra-blocks/types": "^0.1.0",
+    "verror": "^1.10.1"
+  }
 }
