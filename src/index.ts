@@ -1,5 +1,5 @@
 import * as util from "util";
-import VError = require("verror");
+import VError from "verror";
 import { Nullable, isString } from "@infra-blocks/types";
 
 type Message = string | (() => string);
