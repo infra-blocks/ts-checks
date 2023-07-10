@@ -7,7 +7,7 @@
     "node": ">=18.0.0"
   },
   "files": [
-    "lib/**/*.{js,d.ts}"
+    "lib/**/*.{js,d.ts,map}"
   ],
   "type": "module",
   "scripts": {
