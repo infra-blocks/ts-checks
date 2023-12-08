@@ -4,7 +4,11 @@ on:
   pull_request:
     types:
       - opened
+      - reopened
       - synchronize
+      - labeled
+      - unlabeled
+      - closed
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -21,9 +25,8 @@ jobs:
           node-version-file: .nvmrc
           cache: npm
       - run: npm ci
-      - uses: infrastructure-blocks/npm-publish-action@feature/first-implementation
+      - uses: infrastructure-blocks/npm-publish-from-label-action@bugfix/git-sha-dist-tag
         env:
           NPM_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
         with:
-          version: minor
-          prerelease: true
+          release-branch: master
