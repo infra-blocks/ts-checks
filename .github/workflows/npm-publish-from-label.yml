@@ -1,5 +1,8 @@
 name: NPM publish
 
+permissions:
+  pull-requests: write
+
 on:
   pull_request:
     types:
@@ -30,4 +33,3 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
         with:
           github-pat: ${{ secrets.PAT }}
-          release-branch: master
