@@ -10,7 +10,5 @@ permissions:
 jobs:
   merge-template:
     uses: infrastructure-blocks/merge-template-workflow/.github/workflows/merge-template.yml@v0
-    with:
-      template-repository: infrastructure-blocks/ts-lib-template
     secrets:
       github-pat: ${{ secrets.PAT }}
