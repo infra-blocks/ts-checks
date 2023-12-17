@@ -1,0 +1,16 @@
+name: Template updated
+
+on:
+  # TODO: accept label
+  workflow_dispatch: ~
+
+permissions:
+  pull-requests: write
+
+jobs:
+  merge-template:
+    uses: infrastructure-blocks/merge-template-workflow/.github/workflows/merge-template.yml@v0
+    with:
+      template-repository: infrastructure-blocks/ts-lib-template
+    secrets:
+      github-pat: ${{ secrets.PAT }}
