@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import * as util from "util";
 import VError from "verror";
 import { Nullable, isString } from "@infra-blocks/types";
@@ -199,3 +200,6 @@ function getMessage(
   }
   return `${prefix}${joinedWith}${messageStuff()}`;
 }
+=======
+export { testMe } from "./utils.js";
+>>>>>>> template/master
