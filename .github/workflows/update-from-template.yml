@@ -1,14 +1,21 @@
 name: Update From Template
 
 on:
-  # TODO: accept label
-  workflow_dispatch: ~
-
+  workflow_dispatch:
+    inputs:
+      labels:
+        description:
+          A stringified JSON array of labels to apply to the PR.
+        required: false
+        default: '[]'
+        type: string
 permissions:
   pull-requests: write
 
 jobs:
   merge-template:
     uses: infrastructure-blocks/merge-template-workflow/.github/workflows/merge-template.yml@v0
+    with:
+      labels: ${{ inputs.labels }}
     secrets:
       github-pat: ${{ secrets.PAT }}
