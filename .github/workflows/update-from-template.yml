@@ -9,12 +9,14 @@ on:
         required: false
         default: '[]'
         type: string
+
 permissions:
+  # Required to approve pull request with GITHUB_TOKEN
   pull-requests: write
 
 jobs:
   merge-template:
-    uses: infrastructure-blocks/merge-template-workflow/.github/workflows/merge-template.yml@v0
+    uses: infrastructure-blocks/merge-template-workflow/.github/workflows/merge-template.yml@v1
     with:
       labels: ${{ inputs.labels }}
     secrets:
