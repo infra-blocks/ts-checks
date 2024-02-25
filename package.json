@@ -1,6 +1,6 @@
 {
   "name": "@infra-blocks/checks",
-  "version": "0.1.9",
+  "version": "0.2.0",
   "description": "A library with convenient checks for preconditions and more.",
   "license": "ISC",
   "author": "",
