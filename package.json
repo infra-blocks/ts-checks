@@ -2,6 +2,10 @@
   "name": "@infra-blocks/checks",
   "version": "0.2.1",
   "description": "A library with convenient checks for preconditions and more.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/infrastructure-blocks/ts-checks.git"
+  },
   "license": "ISC",
   "author": "",
   "type": "module",
