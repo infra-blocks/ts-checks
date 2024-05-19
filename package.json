@@ -9,7 +9,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/infrastructure-blocks/ts-checks.git"
+    "url": "https://github.com/infra-blocks/ts-checks.git"
   },
   "license": "ISC",
   "author": "",
