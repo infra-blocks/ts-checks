@@ -2,35 +2,41 @@ import * as util from "util";
 import {
   checkNotNull,
   checkType,
-  INVALID_TYPE_ERROR,
-  NULL_VALUE_ERROR,
+  InvalidTypeError,
+  NullValueError,
   Type,
 } from "../../src/index.js";
-import { expect } from "../lib/configured-expect.js";
 import * as sinon from "sinon";
 import { isString } from "@infra-blocks/types";
+import { expect } from "@infra-blocks/test";
 
-describe("checks", function () {
-  describe("checkNotNull", function () {
+describe("index", function () {
+  describe(checkNotNull.name, function () {
     describe("without message", function () {
       it("should throw when it's undefined", function () {
-        expect(() => checkNotNull(undefined))
-          .to.throw()
-          .with.property("name", NULL_VALUE_ERROR);
+        expect(() => checkNotNull(undefined)).to.throw(
+          NullValueError,
+          "unexpected null value"
+        );
       });
       it("should throw when it's null", function () {
-        expect(() => checkNotNull(null))
-          .to.throw()
-          .with.property("name", NULL_VALUE_ERROR);
+        expect(() => checkNotNull(null)).to.throw(
+          NullValueError,
+          "unexpected null value"
+        );
       });
       it("should return the provided value when it's not null", function () {
-        // Try a falsy value to make sure we check against null.
         const value = "I'm not null, I swear!";
         expect(checkNotNull(value)).to.be.equal(value);
       });
+      it("should return the provided value when it's not null even if it's falsy", function () {
+        expect(checkNotNull(0)).to.equal(0);
+        expect(checkNotNull("")).to.equal("");
+        expect(checkNotNull(false)).to.equal(false);
+      });
     });
     describe("with string format parameters", function () {
-      it("should throw a formatted error when it's undefined", function () {
+      it("should respect the formatting requested", function () {
         expect(() =>
           checkNotNull(
             undefined,
@@ -39,29 +45,35 @@ describe("checks", function () {
             "number",
             "expected"
           )
-        )
-          .to.throw("42 is a number you haven't expected")
-          .with.property("name", NULL_VALUE_ERROR);
+        ).to.throw(
+          NullValueError,
+          "unexpected null value: 42 is a number you haven't expected"
+        );
       });
       it("should throw a formatted error when it's null", function () {
-        expect(() => checkNotNull(null, "%d saucisses bien %s", 666, "cuites"))
-          .to.throw("666 saucisses bien cuites")
-          .with.property("name", NULL_VALUE_ERROR);
+        expect(() =>
+          checkNotNull(null, "%d saucisses bien %s", 666, "cuites")
+        ).to.throw(
+          NullValueError,
+          "unexpected null value: 666 saucisses bien cuites"
+        );
       });
       it("should return the provided value when it's not null", function () {
         expect(checkNotNull(42, "where are my %d %s", 2, "keys")).to.equal(42);
       });
     });
-    describe("with message lambda", function () {
-      it("should throw with the message provided by the lambda when it's undefined", function () {
-        expect(() => checkNotNull(undefined, () => "my message"))
-          .to.throw("my message")
-          .with.property("name", NULL_VALUE_ERROR);
+    describe("with message provider", function () {
+      it("should throw with the message provided by the provider when it's undefined", function () {
+        expect(() => checkNotNull(undefined, () => "my message")).to.throw(
+          NullValueError,
+          "unexpected null value: my message"
+        );
       });
-      it("should throw with the message provided by the lambda when it's null", function () {
-        expect(() => checkNotNull(null, () => "boomsplosion"))
-          .to.throw("boomsplosion")
-          .with.property("name", NULL_VALUE_ERROR);
+      it("should throw with the message provided by the provider when it's null", function () {
+        expect(() => checkNotNull(null, () => "boomsplosion")).to.throw(
+          NullValueError,
+          "unexpected null value: boomsplosion"
+        );
       });
       it("should return the provided value when it's not null", function () {
         const messageFn = sinon.fake();
@@ -70,7 +82,7 @@ describe("checks", function () {
       });
     });
   });
-  describe("checkType", function () {
+  describe(checkType.name, function () {
     interface TestGroupParameter {
       description: string;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -86,7 +98,7 @@ describe("checks", function () {
         messageStuff: ["boom %s is realz %d", "splosion", 42],
       },
       {
-        description: "with message lambda",
+        description: "with message provider",
         messageStuff: [(): string => "herro"],
       },
     ];
@@ -254,9 +266,7 @@ describe("checks", function () {
                   firstMessageArg as string,
                   ...messageStuff.slice(1)
                 )
-              )
-                .to.throw(expected)
-                .with.property("name", INVALID_TYPE_ERROR);
+              ).to.throw(InvalidTypeError, expected);
             });
           }
         });
