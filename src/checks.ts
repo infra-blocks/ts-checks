@@ -1,10 +1,10 @@
-import { Nullable } from "@infra-blocks/types";
-import { Message } from "./message.js";
+import type { Nullable } from "@infra-blocks/types";
 import {
   InvalidArrayTypeError,
   InvalidTypeError,
   NullValueError,
 } from "./error.js";
+import type { Message } from "./message.js";
 
 /**
  * Checks that a value is not null or undefined, and return that one if so.
@@ -37,7 +37,7 @@ export function checkNotNull<T>(
 ): T;
 export function checkNotNull<T>(
   value: Nullable<T>,
-  messageProvider: () => string
+  messageProvider: () => string,
 ): T;
 export function checkNotNull<T>(
   value: Nullable<T>,
@@ -62,8 +62,8 @@ export interface Type {
   bigint: bigint;
   symbol: symbol;
   object: object; // Beware that typeof null === "object"
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  ["function"]: Function;
+  // biome-ignore lint/complexity/noBannedTypes: Function is the valid type here.
+  function: Function;
 }
 
 /**
@@ -83,7 +83,7 @@ export interface Type {
  */
 export function checkType<K extends keyof Type>(
   value: unknown,
-  type: K
+  type: K,
 ): Type[K];
 export function checkType<K extends keyof Type>(
   value: unknown,
@@ -94,7 +94,7 @@ export function checkType<K extends keyof Type>(
 export function checkType<K extends keyof Type>(
   value: unknown,
   type: K,
-  messageProvider: () => string
+  messageProvider: () => string,
 ): Type[K];
 export function checkType<K extends keyof Type>(
   value: unknown,
@@ -110,7 +110,7 @@ export function checkType<K extends keyof Type>(
   throw new InvalidTypeError(
     { expected: type, value },
     messageStuff,
-    ...messageArguments
+    ...messageArguments,
   );
 }
 
@@ -131,7 +131,7 @@ export function checkType<K extends keyof Type>(
  */
 export function checkArrayOfType<K extends keyof Type>(
   value: unknown,
-  type: K
+  type: K,
 ): Array<Type[K]>;
 export function checkArrayOfType<K extends keyof Type>(
   value: unknown,
@@ -142,7 +142,7 @@ export function checkArrayOfType<K extends keyof Type>(
 export function checkArrayOfType<K extends keyof Type>(
   value: unknown,
   type: K,
-  messageProvider: () => string
+  messageProvider: () => string,
 ): Array<Type[K]>;
 // TODO: unit test
 export function checkArrayOfType<K extends keyof Type>(
@@ -155,7 +155,7 @@ export function checkArrayOfType<K extends keyof Type>(
     throw new InvalidArrayTypeError(
       { expected: type, value },
       messageStuff,
-      ...messageArguments
+      ...messageArguments,
     );
   }
 

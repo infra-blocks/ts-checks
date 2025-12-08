@@ -1,88 +1,89 @@
-import * as util from "util";
+import * as util from "node:util";
+import { expect } from "@infra-blocks/test";
+import { isString } from "@infra-blocks/types";
+import * as sinon from "sinon";
 import {
   checkNotNull,
   checkType,
   InvalidTypeError,
+  type Message,
   NullValueError,
-  Type,
+  type Type,
 } from "../../src/index.js";
-import * as sinon from "sinon";
-import { isString } from "@infra-blocks/types";
-import { expect } from "@infra-blocks/test";
 
-describe("index", function () {
-  describe(checkNotNull.name, function () {
-    describe("without message", function () {
-      it("should throw when it's undefined", function () {
+describe("index", () => {
+  describe(checkNotNull.name, () => {
+    describe("without message", () => {
+      it("should throw when it's undefined", () => {
         expect(() => checkNotNull(undefined)).to.throw(
           NullValueError,
-          "unexpected null value"
+          "unexpected null value",
         );
       });
-      it("should throw when it's null", function () {
+      it("should throw when it's null", () => {
         expect(() => checkNotNull(null)).to.throw(
           NullValueError,
-          "unexpected null value"
+          "unexpected null value",
         );
       });
-      it("should return the provided value when it's not null", function () {
+      it("should return the provided value when it's not null", () => {
         const value = "I'm not null, I swear!";
         expect(checkNotNull(value)).to.be.equal(value);
       });
-      it("should return the provided value when it's not null even if it's falsy", function () {
+      it("should return the provided value when it's not null even if it's falsy", () => {
         expect(checkNotNull(0)).to.equal(0);
         expect(checkNotNull("")).to.equal("");
         expect(checkNotNull(false)).to.equal(false);
       });
     });
-    describe("with string format parameters", function () {
-      it("should respect the formatting requested", function () {
+    describe("with string format parameters", () => {
+      it("should respect the formatting requested", () => {
         expect(() =>
           checkNotNull(
             undefined,
             "%d is a %s you haven't %s",
             42,
             "number",
-            "expected"
-          )
+            "expected",
+          ),
         ).to.throw(
           NullValueError,
-          "unexpected null value: 42 is a number you haven't expected"
+          "unexpected null value: 42 is a number you haven't expected",
         );
       });
-      it("should throw a formatted error when it's null", function () {
+      it("should throw a formatted error when it's null", () => {
         expect(() =>
-          checkNotNull(null, "%d saucisses bien %s", 666, "cuites")
+          checkNotNull(null, "%d saucisses bien %s", 666, "cuites"),
         ).to.throw(
           NullValueError,
-          "unexpected null value: 666 saucisses bien cuites"
+          "unexpected null value: 666 saucisses bien cuites",
         );
       });
-      it("should return the provided value when it's not null", function () {
+      it("should return the provided value when it's not null", () => {
         expect(checkNotNull(42, "where are my %d %s", 2, "keys")).to.equal(42);
       });
     });
-    describe("with message provider", function () {
-      it("should throw with the message provided by the provider when it's undefined", function () {
+    describe("with message provider", () => {
+      it("should throw with the message provided by the provider when it's undefined", () => {
         expect(() => checkNotNull(undefined, () => "my message")).to.throw(
           NullValueError,
-          "unexpected null value: my message"
+          "unexpected null value: my message",
         );
       });
-      it("should throw with the message provided by the provider when it's null", function () {
+      it("should throw with the message provided by the provider when it's null", () => {
         expect(() => checkNotNull(null, () => "boomsplosion")).to.throw(
           NullValueError,
-          "unexpected null value: boomsplosion"
+          "unexpected null value: boomsplosion",
         );
       });
-      it("should return the provided value when it's not null", function () {
+      it("should return the provided value when it's not null", () => {
         const messageFn = sinon.fake();
         expect(checkNotNull("null", messageFn)).to.equal("null");
         expect(messageFn).to.not.have.been.called;
       });
     });
   });
-  describe(checkType.name, function () {
+  describe(checkType.name, () => {
     interface TestGroupParameter {
       description: string;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -104,102 +105,102 @@ describe("index", function () {
     ];
 
     for (const { description, messageStuff } of testsGroupsParameters) {
-      describe(description, function () {
-        describe("with proper type", function () {
-          it("should work for undefined", function () {
+      describe(description, () => {
+        describe("with proper type", () => {
+          it("should work for undefined", () => {
             const value: unknown = undefined;
             // Check that it compiles with the proper type;
             const effective: undefined = checkType(
               value,
               "undefined",
               messageStuff[0] as string,
-              ...messageStuff.slice(1)
+              ...messageStuff.slice(1),
             );
             expect(effective).to.equal(value);
           });
-          it("should work for boolean", function () {
+          it("should work for boolean", () => {
             const value: unknown = true;
             const effective: boolean = checkType(
               value,
               "boolean",
               messageStuff[0] as string,
-              ...messageStuff.slice(1)
+              ...messageStuff.slice(1),
             );
             expect(effective).to.equal(value);
           });
-          it("should work for number", function () {
+          it("should work for number", () => {
             const value: unknown = 42;
             const effective: number = checkType(
               value,
               "number",
               messageStuff[0] as string,
-              ...messageStuff.slice(1)
+              ...messageStuff.slice(1),
             );
             expect(effective).to.equal(value);
           });
-          it("should work for string", function () {
+          it("should work for string", () => {
             const value: unknown = "toto";
             const effective: string = checkType(
               value,
               "string",
               messageStuff[0] as string,
-              ...messageStuff.slice(1)
+              ...messageStuff.slice(1),
             );
             expect(effective).to.equal(value);
           });
-          it("should work for bigint", function () {
+          it("should work for bigint", () => {
             const value: unknown = BigInt(123456789);
             const effective: bigint = checkType(
               value,
               "bigint",
               messageStuff[0] as string,
-              ...messageStuff.slice(1)
+              ...messageStuff.slice(1),
             );
             expect(effective).to.equal(value);
           });
-          it("should work for symbol", function () {
+          it("should work for symbol", () => {
             const value: unknown = Symbol("mySymbol");
             const effective: symbol = checkType(
               value,
               "symbol",
               messageStuff[0] as string,
-              ...messageStuff.slice(1)
+              ...messageStuff.slice(1),
             );
             expect(effective).to.equal(value);
           });
-          it("should work for object", function () {
+          it("should work for object", () => {
             const value: unknown = {};
             const effective: object = checkType(
               value,
               "object",
               messageStuff[0] as string,
-              ...messageStuff.slice(1)
+              ...messageStuff.slice(1),
             );
             expect(effective).to.equal(value);
           });
-          it("should work for null", function () {
+          it("should work for null", () => {
             const value: unknown = null;
             const effective: object = checkType(
               value,
               "object",
               messageStuff[0] as string,
-              ...messageStuff.slice(1)
+              ...messageStuff.slice(1),
             );
             expect(effective).to.equal(value);
           });
-          it("should work for function", function () {
+          it("should work for function", () => {
             const value: unknown = () => "toto";
-            // eslint-disable-next-line @typescript-eslint/ban-types
+            // biome-ignore lint/complexity/noBannedTypes: Gotta deal with Function types sometimes...
             const effective: Function = checkType(
               value,
               "function",
               messageStuff[0] as string,
-              ...messageStuff.slice(1)
+              ...messageStuff.slice(1),
             );
             expect(effective).to.equal(value);
           });
         });
-        describe("with invalid type", function () {
+        describe("with invalid type", () => {
           interface TestParameter {
             type: keyof Type;
             value: unknown;
@@ -245,15 +246,15 @@ describe("index", function () {
           ];
 
           for (const { type, value } of testsParameters) {
-            it(`should throw for invalid ${type}`, function () {
-              let expected;
+            it(`should throw for invalid ${type}`, () => {
+              let expected: Message | undefined;
               const firstMessageArg = messageStuff[0];
               if (firstMessageArg == null) {
                 expected = undefined;
               } else if (isString(firstMessageArg)) {
                 expected = util.format(
                   firstMessageArg,
-                  ...messageStuff.slice(1)
+                  ...messageStuff.slice(1),
                 );
               } else {
                 expected = (firstMessageArg as () => string)();
@@ -264,8 +265,8 @@ describe("index", function () {
                   value,
                   type,
                   firstMessageArg as string,
-                  ...messageStuff.slice(1)
-                )
+                  ...messageStuff.slice(1),
+                ),
               ).to.throw(InvalidTypeError, expected);
             });
           }
