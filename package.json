@@ -38,7 +38,7 @@
     "test:unit": "mocha --config test/unit/.mocharc.cjs 'test/unit/**/*.spec.ts'"
   },
   "dependencies": {
-    "@infra-blocks/types": "^0.3.0"
+    "@infra-blocks/types": "^0.20.0"
   },
   "devDependencies": {
     "@infra-blocks/test": "^0.5.0",
