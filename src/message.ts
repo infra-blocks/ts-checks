@@ -1,5 +1,5 @@
-import { isString, Provider } from "@infra-blocks/types";
-import * as util from "util";
+import * as util from "node:util";
+import { isString, type Provider } from "@infra-blocks/types";
 
 export type Message = string | Provider<string>;
 
@@ -15,7 +15,7 @@ export function getMessage(
   if (isString(messageStuff)) {
     return `${prefix}${joinedWith}${util.format(
       messageStuff,
-      ...messageArguments
+      ...messageArguments,
     )}`;
   }
   return `${prefix}${joinedWith}${messageStuff()}`;

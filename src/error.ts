@@ -1,10 +1,10 @@
-import * as util from "util";
-import { getMessage, Message } from "./message.js";
+import * as util from "node:util";
+import { getMessage, type Message } from "./message.js";
 
 export class NullValueError extends Error {
   constructor(message?: Message, ...messageArguments: unknown[]) {
     super(
-      getMessage("unexpected null value", ": ", message, ...messageArguments)
+      getMessage("unexpected null value", ": ", message, ...messageArguments),
     );
     this.name = NullValueError.name;
   }
@@ -20,12 +20,12 @@ export class InvalidTypeError extends Error {
     super(
       getMessage(
         `expected type ${expected} but value ${util.inspect(
-          value
+          value,
         )} is of type ${typeof value}`,
         ": ",
         message,
-        ...messageArguments
-      )
+        ...messageArguments,
+      ),
     );
     this.name = InvalidTypeError.name;
   }
@@ -43,8 +43,8 @@ export class InvalidArrayTypeError extends Error {
         `expected array of type ${expected} but got ${util.inspect(value)}`,
         ": ",
         message,
-        ...messageArguments
-      )
+        ...messageArguments,
+      ),
     );
     this.name = InvalidArrayTypeError.name;
   }
