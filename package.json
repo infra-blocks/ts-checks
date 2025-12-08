@@ -42,7 +42,7 @@
     "verror": "^1.10.1"
   },
   "devDependencies": {
-    "@infra-blocks/test": "^0.3.6",
+    "@infra-blocks/test": "^0.5.0",
     "@types/mocha": "^10.0.1",
     "@types/node": "^24.10.1",
     "@types/verror": "^1.10.6",
